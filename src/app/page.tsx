@@ -58,7 +58,7 @@ export default function HomePage() {
                             </p>
 
                             <div className="space-y-4 pt-2">
-                                <a href="tel:+27711234567" className="flex items-center gap-4 p-4 rounded-xl bg-white border border-stone-200 shadow-sm hover:border-[#C2933D] transition">
+                                <a href="tel:+27836213226" className="flex items-center gap-4 p-4 rounded-xl bg-white border border-stone-200 shadow-sm hover:border-[#C2933D] transition">
                                     <div className="w-10 h-10 rounded-lg bg-[#1C3322] text-[#C2933D] flex items-center justify-center flex-shrink-0">
                                         <Phone className="w-5 h-5" />
                                     </div>
