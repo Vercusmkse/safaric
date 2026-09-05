@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import React, { useState } from 'react';
 import { useCurrency } from '@/context/CurrencyContext';
 import { CURRENCIES } from '@/lib/currency';
@@ -20,15 +21,15 @@ export default function Navbar({ onOpenBooking }: NavbarProps) {
             <div className="bg-[#122216] text-[#EAD5A8] text-xs py-2 px-4 border-b border-[#1C3322]/60">
                 <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
                     <div className="flex items-center gap-4 text-[11px] sm:text-xs">
-            <span className="flex items-center gap-1.5 font-medium">
-              <MapPin className="w-3.5 h-3.5 text-[#C2933D]" />
-              Kruger National Park &amp; Surrounding Areas, South Africa
-            </span>
+                        <span className="flex items-center gap-1.5 font-medium">
+                            <MapPin className="w-3.5 h-3.5 text-[#C2933D]" />
+                            Kruger National Park &amp; Surrounding Areas, South Africa
+                        </span>
                         <span className="hidden md:inline text-[#2B4D34]">|</span>
                         <span className="hidden md:flex items-center gap-1 text-emerald-400">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              FGASA Certified Field Guides
-            </span>
+                            <ShieldCheck className="w-3.5 h-3.5" />
+                            FGASA Certified Field Guides
+                        </span>
                     </div>
 
                     <div className="flex items-center gap-4 text-xs">
@@ -65,22 +66,17 @@ export default function Navbar({ onOpenBooking }: NavbarProps) {
             <header className="sticky top-0 z-40 bg-[#1C3322]/95 backdrop-blur-md text-white border-b border-[#C2933D]/20 shadow-xl">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
 
-                    {/* Scalable SVG Logo */}
+                    {/* Company Brand Logo */}
                     <a href="#" className="flex items-center gap-3.5 group">
-                        <div className="relative w-12 h-12 flex-shrink-0 transition-transform duration-300 group-hover:scale-105">
-                            <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow">
-                                <circle cx="100" cy="100" r="88" fill="none" stroke="#C2933D" strokeWidth="3" strokeDasharray="450 60" strokeLinecap="round" />
-                                <circle cx="100" cy="100" r="88" fill="none" stroke="#2B4D34" strokeWidth="4.5" strokeDasharray="250 250" strokeLinecap="round" transform="rotate(130 100 100)" />
-                                <path d="M48,135 Q70,146 102,152 Q72,138 52,130 Z" fill="#2B4D34" />
-                                <path d="M52,133 Q62,118 64,106 Q68,98 72,94 L70,91 Q63,98 60,105 Q58,118 48,134 Z" fill="#2B4D34" />
-                                <ellipse cx="64" cy="92" rx="30" ry="7" fill="#2B4D34" />
-                                <ellipse cx="68" cy="88" rx="22" ry="5" fill="#2B4D34" />
-                                <ellipse cx="60" cy="85" rx="14" ry="4" fill="#2B4D34" />
-                                <text x="96" y="122" fontFamily="'Cormorant Garamond', Georgia, serif" fontSize="110" fontWeight="700" fill="#C2933D" textAnchor="middle">S</text>
-                                <text x="126" y="140" fontFamily="'Cormorant Garamond', Georgia, serif" fontSize="95" fontWeight="700" fill="#2B4D34" textAnchor="middle">C</text>
-                                <path d="M125,56 Q135,46 142,50 Q146,55 142,61 Q155,60 162,72 Q166,79 160,85 Q154,87 148,84 Q142,88 136,83" fill="none" stroke="#C2933D" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                                <circle cx="152" cy="65" r="1.5" fill="#C2933D" />
-                            </svg>
+                        <div className="relative w-12 h-12 flex-shrink-0 transition-transform duration-300 group-hover:scale-105 overflow-hidden rounded-full border border-[#C2933D]/40 bg-white shadow-md">
+                            <Image
+                                src="/logoo.jpg"
+                                alt="SAFARIC Logo"
+                                width={48}
+                                height={48}
+                                priority
+                                className="w-full h-full object-cover"
+                            />
                         </div>
                         <div>
                             <span className="font-serif text-2xl font-bold tracking-[0.2em] text-white block">SAFARIC</span>
