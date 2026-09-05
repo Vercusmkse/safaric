@@ -96,7 +96,7 @@ export default function Navbar({ onOpenBooking }: NavbarProps) {
                     {/* Actions */}
                     <div className="flex items-center gap-3">
                         <a
-                            href="https://wa.me/27711234567?text=Hello%20Safaric!%20I'm%20planning%20a%20Kruger%20Safari."
+                            href="https://wa.me/27836213226?text=Hello%20Safaric!%20I'm%20planning%20a%20Kruger%20Safari."
                             target="_blank"
                             rel="noopener noreferrer"
                             className="hidden sm:inline-flex items-center gap-1.5 bg-emerald-800/80 hover:bg-emerald-700 text-white text-xs font-semibold px-3.5 py-2.5 rounded-full border border-emerald-500/40 transition shadow"
