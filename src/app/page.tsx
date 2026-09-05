@@ -64,7 +64,7 @@ export default function HomePage() {
                                     </div>
                                     <div>
                                         <span className="text-[10px] text-stone-400 uppercase font-semibold block">Reservations Phone</span>
-                                        <span className="text-sm font-bold text-[#1C3322]">+27 71 123 4567</span>
+                                        <span className="text-sm font-bold text-[#1C3322]">+27 83 621 3226</span>
                                     </div>
                                 </a>
 
