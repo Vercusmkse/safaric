@@ -8,22 +8,34 @@ interface HeroProps {
     onQuickBook: (packageId: string, date: string, adults: number) => void;
 }
 
-const BACKGROUND_SLIDES = [
+const BACKGROUND_SLIDES: { src: string; alt: string }[] = [
     {
-        src: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=2000&q=80',
-        alt: 'African Safari Sunset over Kruger savanna',
+        src: '/The-Big-Five-header.jpg',
+        alt: 'The Big Five in Kruger National Park',
     },
     {
-        src: 'https://images.unsplash.com/photo-1534177616072-ef7dc120449d?auto=format&fit=crop&w=2000&q=80',
-        alt: 'Male lion resting in Kruger National Park',
+        src: '/elephent.webp',
+        alt: 'Wild elephant in Kruger savanna',
     },
     {
-        src: 'https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?auto=format&fit=crop&w=2000&q=80',
-        alt: 'Herd of wild African elephants walking at dusk',
+        src: '/lion-cubs2.jpg',
+        alt: 'Lion cubs in the wild',
     },
     {
-        src: 'https://images.unsplash.com/photo-1549366021-9f761d450615?auto=format&fit=crop&w=2000&q=80',
-        alt: 'Leopard perched on a marula tree branch',
+        src: '/unnamed.webp',
+        alt: '/beauty',
+    },
+    {
+        src: '/leopard-3.jpg',
+        alt: 'African leopard resting on a branch',
+    },
+    {
+        src: '/jaraph.webp',
+        alt: 'Giraffe in the African bush',
+    },
+    {
+        src: '/bird.webp',
+        alt: 'Safari birdlife Kruger',
     },
 ];
 
