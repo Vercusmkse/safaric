@@ -23,7 +23,7 @@ const BACKGROUND_SLIDES: { src: string; alt: string }[] = [
     },
     {
         src: '/unnamed.webp',
-        alt: '/beauty',
+        alt: 'Scenic safari landscape',
     },
     {
         src: '/leopard-3.jpg',
@@ -79,7 +79,7 @@ export default function Hero({ onQuickBook }: HeroProps) {
                             <img
                                 src={slide.src}
                                 alt={slide.alt}
-                                className={`w-full h-full object-cover object-center filter brightness-[0.38] transition-transform duration-[7000ms] ease-out ${
+                                className={`w-full h-full object-cover object-center transition-transform duration-[7000ms] ease-out ${
                                     isActive ? 'scale-105' : 'scale-100'
                                 }`}
                             />
@@ -87,35 +87,35 @@ export default function Hero({ onQuickBook }: HeroProps) {
                     );
                 })}
 
-                {/* Ambient Safaric Vignettes & Gradients */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#122216] via-[#122216]/50 to-transparent" />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#122216]/80 via-transparent to-[#122216]/70" />
+                {/* Clear, subtle scrim to keep text legible without dimming the image */}
+                <div className="absolute inset-0 bg-black/30" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#122216]/90 via-transparent to-black/30" />
             </div>
 
             <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1C3322]/80 border border-[#C2933D]/40 text-[#EAD5A8] text-xs tracking-widest uppercase mb-6 shadow">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1C3322]/80 backdrop-blur-sm border border-[#C2933D]/50 text-[#EAD5A8] text-xs tracking-widest uppercase mb-6 shadow-lg">
                     <span className="w-2 h-2 rounded-full bg-[#C2933D] animate-ping" />
                     Wildlife • People • Places • For a Brighter Tomorrow
                 </div>
 
-                <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white leading-tight mb-4">
+                <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white leading-tight mb-4 drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
                     Kruger National Park <span className="block italic font-light text-[#DEAE59]">Safaris</span>
                 </h1>
 
-                <p className="font-sans text-stone-200 text-sm sm:text-lg max-w-2xl mx-auto font-light leading-relaxed mb-8">
+                <p className="font-sans text-stone-100 text-sm sm:text-lg max-w-2xl mx-auto font-light leading-relaxed mb-8 drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
                     <strong className="font-semibold text-white tracking-wide">GUIDED SAFARIS &nbsp;|&nbsp; TRANSFERS &nbsp;|&nbsp; TAILOR-MADE EXPERIENCES</strong><br />
                     Experience Africa’s greatest wilderness through elevated open 4x4 vehicles, certified indigenous trackers, and soul-stirring Big Five encounters.
                 </p>
 
                 {/* Badges */}
-                <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-stone-300 mb-10">
+                <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-stone-200 mb-10 drop-shadow-[0_1px_4px_rgba(0,0,0,0.6)]">
                     <span className="flex items-center gap-1.5"><Compass className="w-4 h-4 text-[#C2933D]" /> FGASA Certified Field Guides</span>
                     <span className="flex items-center gap-1.5"><Camera className="w-4 h-4 text-[#C2933D]" /> Custom Open 4x4 Tiered Vehicles</span>
                     <span className="flex items-center gap-1.5"><Leaf className="w-4 h-4 text-[#C2933D]" /> Sustainable &amp; Conservation Driven</span>
                 </div>
 
                 {/* Quick Booking Engine Bar */}
-                <div className="bg-[#122216]/90 backdrop-blur-md p-4 sm:p-6 rounded-2xl border border-[#C2933D]/30 shadow-2xl max-w-4xl mx-auto text-left">
+                <div className="bg-[#122216]/90 backdrop-blur-md p-4 sm:p-6 rounded-2xl border border-[#C2933D]/40 shadow-2xl max-w-4xl mx-auto text-left">
                     <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
                         <div>
                             <label className="block text-[11px] uppercase tracking-wider text-[#C2933D] font-bold mb-1">Safari Experience</label>
@@ -182,7 +182,7 @@ export default function Hero({ onQuickBook }: HeroProps) {
                             className={`h-1.5 rounded-full transition-all duration-300 ${
                                 index === currentImageIndex
                                     ? 'w-6 bg-[#C2933D]'
-                                    : 'w-2 bg-white/20 hover:bg-white/40'
+                                    : 'w-2 bg-white/40 hover:bg-white/70'
                             }`}
                         />
                     ))}
