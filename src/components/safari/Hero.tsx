@@ -1,12 +1,31 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Compass, Camera, Leaf, ChevronRight, Search } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Compass, Camera, Leaf, Search } from 'lucide-react';
 import { SAFARI_PACKAGES } from '@/data/packages';
 
 interface HeroProps {
     onQuickBook: (packageId: string, date: string, adults: number) => void;
 }
+
+const BACKGROUND_SLIDES = [
+    {
+        src: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=2000&q=80',
+        alt: 'African Safari Sunset over Kruger savanna',
+    },
+    {
+        src: 'https://images.unsplash.com/photo-1534177616072-ef7dc120449d?auto=format&fit=crop&w=2000&q=80',
+        alt: 'Male lion resting in Kruger National Park',
+    },
+    {
+        src: 'https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?auto=format&fit=crop&w=2000&q=80',
+        alt: 'Herd of wild African elephants walking at dusk',
+    },
+    {
+        src: 'https://images.unsplash.com/photo-1549366021-9f761d450615?auto=format&fit=crop&w=2000&q=80',
+        alt: 'Leopard perched on a marula tree branch',
+    },
+];
 
 export default function Hero({ onQuickBook }: HeroProps) {
     const [selectedPkg, setSelectedPkg] = useState(SAFARI_PACKAGES[0].id);
@@ -16,6 +35,16 @@ export default function Hero({ onQuickBook }: HeroProps) {
         return d.toISOString().split('T')[0];
     });
     const [guestCount, setGuestCount] = useState(2);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    // Auto-rotate background every 6.5 seconds
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentImageIndex((prev) => (prev + 1) % BACKGROUND_SLIDES.length);
+        }, 6500);
+
+        return () => clearInterval(interval);
+    }, []);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -24,13 +53,29 @@ export default function Hero({ onQuickBook }: HeroProps) {
 
     return (
         <section className="relative min-h-[92vh] flex items-center justify-center bg-[#122216] text-white overflow-hidden">
-            {/* Visual Canvas Background */}
-            <div className="absolute inset-0 z-0">
-                <img
-                    src="https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=2000&q=80"
-                    alt="African Safari Sunset Kruger"
-                    className="w-full h-full object-cover object-center filter brightness-[0.38] scale-105"
-                />
+            {/* Visual Canvas Background with Crossfade Transition */}
+            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+                {BACKGROUND_SLIDES.map((slide, index) => {
+                    const isActive = index === currentImageIndex;
+                    return (
+                        <div
+                            key={slide.src}
+                            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                                isActive ? 'opacity-100' : 'opacity-0'
+                            }`}
+                        >
+                            <img
+                                src={slide.src}
+                                alt={slide.alt}
+                                className={`w-full h-full object-cover object-center filter brightness-[0.38] transition-transform duration-[7000ms] ease-out ${
+                                    isActive ? 'scale-105' : 'scale-100'
+                                }`}
+                            />
+                        </div>
+                    );
+                })}
+
+                {/* Ambient Safaric Vignettes & Gradients */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#122216] via-[#122216]/50 to-transparent" />
                 <div className="absolute inset-0 bg-gradient-to-r from-[#122216]/80 via-transparent to-[#122216]/70" />
             </div>
@@ -112,6 +157,23 @@ export default function Hero({ onQuickBook }: HeroProps) {
                             </button>
                         </div>
                     </form>
+                </div>
+
+                {/* Subtle Interactive Slide Indicators */}
+                <div className="flex items-center justify-center gap-2 mt-6">
+                    {BACKGROUND_SLIDES.map((_, index) => (
+                        <button
+                            key={index}
+                            type="button"
+                            onClick={() => setCurrentImageIndex(index)}
+                            aria-label={`Switch to safari background ${index + 1}`}
+                            className={`h-1.5 rounded-full transition-all duration-300 ${
+                                index === currentImageIndex
+                                    ? 'w-6 bg-[#C2933D]'
+                                    : 'w-2 bg-white/20 hover:bg-white/40'
+                            }`}
+                        />
+                    ))}
                 </div>
             </div>
         </section>
