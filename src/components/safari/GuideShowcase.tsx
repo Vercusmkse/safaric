@@ -1,16 +1,28 @@
 'use client';
 
 import React, { useState } from 'react';
-import { GuideProfile } from '@/types/safari';
-import { Award, Volume2 } from 'lucide-react';
 import Image from 'next/image';
+import { Award, Volume2 } from 'lucide-react';
 
-const GUIDES: GuideProfile[] = [
+interface GuideData {
+    id: string;
+    name: string;
+    role: string;
+    accreditation: string;
+    registrationNumber: string;
+    specialties: string[];
+    yearsExperience: number;
+    bio: string;
+    imageUrl: string;
+}
+
+const GUIDES: GuideData[] = [
     {
         id: 'guide-sipho',
         name: 'Sipho Khumalo',
         role: 'Lead Naturalist & Tracker',
-        fgasaLevel: 'FGASA Level 2 • Dangerous Game',
+        accreditation: 'Tourism Act Registered • Dangerous Game Certified',
+        registrationNumber: 'GP/NAT/4821',
         specialties: ['Predator Ethology', 'Track & Sign Specialist', 'Birding Identification'],
         yearsExperience: 14,
         bio: 'Raised along the southern boundary of Greater Kruger, Sipho has spent over a decade deciphering lowveld footprints, alarm calls, and predator movement corridors.',
@@ -19,8 +31,9 @@ const GUIDES: GuideProfile[] = [
     {
         id: 'guide-johann',
         name: 'Johann Van Der Merwe',
-        role: 'Photography Safari Specialist',
-        fgasaLevel: 'FGASA NQF4 • DEAT Registered',
+        role: 'Senior Naturalist & Wildlife Specialist',
+        accreditation: 'CATHSSETA NQF Level 4 • Provincially Registered',
+        registrationNumber: 'MP/NAT/3190',
         specialties: ['Wildlife Photography', 'Lowveld Ecology', 'Astrophotography'],
         yearsExperience: 11,
         bio: 'A professional wildlife photographer and guide who positions vehicles specifically for golden hour angles, clean backgrounds, and predictable animal behavior.',
@@ -32,36 +45,36 @@ export function GuideShowcase() {
     const [playingGuideId, setPlayingGuideId] = useState<string | null>(null);
 
     const toggleAudio = (id: string) => {
-        setPlayingGuideId(playingGuideId === id ? null : id);
+        setPlayingGuideId((prev) => (prev === id ? null : id));
     };
 
     return (
-        <section className="py-20 bg-[#1C3322] border-t border-[#C2933D]/20 text-white">
+        <section className="py-20 bg-[#122216] border-t border-[#C2933D]/20 text-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                 {/* Section Header */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between mb-14">
+                <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
                     <div>
                         <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#C2933D] block mb-2">
                             Guiding Excellence
                         </span>
-                        <h2 className="font-serif text-3xl sm:text-5xl font-bold text-white">
-                            Verified FGASA Lead Rangers
+                        <h2 className="font-serif text-3xl sm:text-5xl font-bold text-white tracking-tight">
+                            Accredited Lead Nature Guides
                         </h2>
                     </div>
-                    <p className="mt-4 md:mt-0 text-stone-300 text-sm sm:text-base font-light max-w-md leading-relaxed">
-                        Every SAFARIC departure is captained by accredited professional guides holding official Dangerous Game qualifications and decades of lowveld tracking pedigree.
+                    <p className="text-stone-300 text-xs sm:text-sm font-light max-w-md leading-relaxed">
+                        Every SAFARIC departure is captained by accredited professional guides holding statutory Tourism Act qualifications, dangerous game tracking credentials, and decades of lowveld pedigree.
                     </p>
                 </div>
 
-                {/* Guide Cards */}
+                {/* Guide Cards Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {GUIDES.map((guide) => (
                         <div
                             key={guide.id}
-                            className="rounded-3xl border border-[#C2933D]/30 bg-[#122216] p-6 sm:p-8 flex flex-col sm:flex-row gap-6 shadow-2xl hover:border-[#C2933D] transition-colors"
+                            className="rounded-3xl border border-[#C2933D]/30 bg-[#162a1c] p-6 sm:p-8 flex flex-col sm:flex-row gap-6 shadow-2xl hover:border-[#C2933D] transition-colors"
                         >
-                            {/* Guide Photo */}
+                            {/* Guide Headshot */}
                             <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-2xl overflow-hidden shrink-0 border border-[#C2933D]/40">
                                 <Image
                                     src={guide.imageUrl}
@@ -71,21 +84,27 @@ export function GuideShowcase() {
                                 />
                             </div>
 
-                            {/* Guide Info */}
+                            {/* Guide Profile Information */}
                             <div className="flex-1 flex flex-col justify-between">
                                 <div>
                                     <div className="flex items-start justify-between gap-2">
-                                        <h3 className="font-serif text-xl sm:text-2xl font-bold text-white">
-                                            {guide.name}
-                                        </h3>
+                                        <div>
+                                            <h3 className="font-serif text-xl sm:text-2xl font-bold text-white">
+                                                {guide.name}
+                                            </h3>
+                                            <span className="text-[10px] text-stone-400 font-mono block">
+                                                Reg: {guide.registrationNumber}
+                                            </span>
+                                        </div>
                                         <span className="text-[11px] text-[#DEAE59] font-semibold bg-[#1C3322] px-2.5 py-1 rounded-full border border-[#C2933D]/30 whitespace-nowrap">
                                             {guide.yearsExperience}+ Yrs Bush
                                         </span>
                                     </div>
 
-                                    <div className="inline-flex items-center gap-1.5 text-xs text-[#DEAE59] font-medium mt-1.5">
-                                        <Award className="w-4 h-4 shrink-0 text-[#C2933D]" />
-                                        <span>{guide.fgasaLevel}</span>
+                                    {/* Accreditation Line */}
+                                    <div className="inline-flex items-center gap-1.5 text-xs text-[#DEAE59] font-medium mt-2">
+                                        <Award className="w-3.5 h-3.5 shrink-0 text-[#C2933D]" />
+                                        <span>{guide.accreditation}</span>
                                     </div>
 
                                     <p className="text-xs sm:text-sm text-stone-300 font-light mt-3 leading-relaxed">
@@ -93,7 +112,7 @@ export function GuideShowcase() {
                                     </p>
                                 </div>
 
-                                {/* Specialties & Audio Intro */}
+                                {/* Tags & Audio Action */}
                                 <div className="mt-5 pt-4 border-t border-[#C2933D]/20 flex items-center justify-between gap-2">
                                     <div className="flex flex-wrap gap-1.5">
                                         {guide.specialties.map((spec) => (
@@ -105,12 +124,14 @@ export function GuideShowcase() {
                                             </span>
                                         ))}
                                     </div>
+
                                     <button
+                                        type="button"
                                         onClick={() => toggleAudio(guide.id)}
-                                        aria-label={playingGuideId === guide.id ? `Stop welcome snippet from ${guide.name}` : `Listen to welcome snippet from ${guide.name}`}
+                                        aria-label={playingGuideId === guide.id ? `Stop intro for ${guide.name}` : `Listen to intro for ${guide.name}`}
                                         className="inline-flex items-center gap-1.5 text-xs text-[#DEAE59] hover:text-white cursor-pointer font-semibold transition shrink-0"
                                     >
-                                        <Volume2 className="w-4 h-4 text-[#C2933D]" />
+                                        <Volume2 className="w-3.5 h-3.5 text-[#C2933D]" />
                                         <span>{playingGuideId === guide.id ? 'Playing...' : 'Audio Intro'}</span>
                                     </button>
                                 </div>
@@ -123,3 +144,5 @@ export function GuideShowcase() {
         </section>
     );
 }
+
+export default GuideShowcase;

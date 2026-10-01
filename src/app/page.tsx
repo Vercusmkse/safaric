@@ -8,11 +8,11 @@ import BigFiveShowcase from '@/components/safari/BigFiveShowcase';
 import ServicesSection from '@/components/safari/ServicesSection';
 import ImpactSection from '@/components/safari/ImpactSection';
 import BookingModal from '@/components/booking/BookingModal';
-import { StickyBookingBar } from '@/components/booking/StickyBookingBar';
+import StickyBookingBar from '@/components/booking/StickyBookingBar';
 import { DiurnalTimeline } from '@/components/safari/DiurnalTimeline';
-import { GuideShowcase } from '@/components/safari/GuideShowcase';
+// import { GuideShowcase } from '@/components/safari/GuideShowcase'; // Temporarily hidden
 import { SafariPackage } from '@/types/safari';
-import { Phone, Mail, MapPin, Globe } from 'lucide-react';
+import { Phone, Mail, MapPin, Globe, MessageCircle } from 'lucide-react';
 
 export default function HomePage() {
     const [modalOpen, setModalOpen] = useState(false);
@@ -39,17 +39,17 @@ export default function HomePage() {
     };
 
     return (
-        <main className="min-h-screen flex flex-col bg-[#0d1610] text-stone-100">
+        <main className="min-h-screen flex flex-col bg-[#122216] text-stone-100">
             {/* Global Navigation */}
             <Navbar onOpenBooking={() => setModalOpen(true)} />
 
-            {/* Sticky Real-Time Booking Bar (Appears on scroll past 350px) */}
+            {/* Sticky Real-Time Booking Bar */}
             <StickyBookingBar onOpenBookingModal={handleStickyBarBook} />
 
             {/* Hero Section */}
             <Hero onQuickBook={handleHeroQuickBook} />
 
-            {/* Packages Grid (Affordable Luxury Flagships & Day Drives) */}
+            {/* Packages Grid */}
             <PackageSection onSelectPackage={handleSelectPackage} />
 
             {/* Interactive "Day in the Bush" Diurnal Engine */}
@@ -58,13 +58,13 @@ export default function HomePage() {
             {/* Big Five Wildlife Field Guide */}
             <BigFiveShowcase />
 
-            {/* Verified FGASA Field Guides & Tracking Specialists */}
-            <GuideShowcase />
+            {/* Guide Showcase (Preserved in code, hidden from display) */}
+            {/* <GuideShowcase /> */}
 
             {/* Logistics & Ground Services */}
             <ServicesSection />
 
-            {/* Carbon-Neutral & Community Impact */}
+            {/* Conservation & Community Impact */}
             <ImpactSection />
 
             {/* Inquiry & Direct Contact Details */}
@@ -80,10 +80,25 @@ export default function HomePage() {
                                 Start Planning Your Kruger Journey
                             </h2>
                             <p className="text-stone-600 text-sm sm:text-base font-light leading-relaxed">
-                                Connect directly with our local Kruger operations desk for custom vehicle availability, gate logistics, and tailor-made multi-day circuits.
+                                Connect directly with our local Kruger operations desk for vehicle availability, gate logistics, lodge pickups, and tailor-made itineraries.
                             </p>
 
-                            <div className="space-y-4 pt-2">
+                            <div className="space-y-3 pt-2">
+                                <a
+                                    href="https://wa.me/27836213226?text=Hello%20SAFARIC!%20I%20would%20like%20to%20inquire%20about%20a%20Kruger%20safari."
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-4 p-4 rounded-xl bg-white border border-stone-200 shadow-sm hover:border-[#25D366] transition group"
+                                >
+                                    <div className="w-10 h-10 rounded-lg bg-[#25D366]/20 text-[#25D366] flex items-center justify-center flex-shrink-0 group-hover:bg-[#25D366] group-hover:text-white transition">
+                                        <MessageCircle className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <span className="text-[10px] text-stone-400 uppercase font-semibold block">WhatsApp Direct Desk</span>
+                                        <span className="text-sm font-bold text-[#1C3322]">+27 83 621 3226</span>
+                                    </div>
+                                </a>
+
                                 <a
                                     href="tel:+27836213226"
                                     className="flex items-center gap-4 p-4 rounded-xl bg-white border border-stone-200 shadow-sm hover:border-[#C2933D] transition"
@@ -115,7 +130,7 @@ export default function HomePage() {
                                         <MapPin className="w-5 h-5" />
                                     </div>
                                     <div>
-                                        <span className="text-[10px] text-stone-400 uppercase font-semibold block">Operational Gateway</span>
+                                        <span className="text-[10px] text-stone-400 uppercase font-semibold block">Operational Hub</span>
                                         <span className="text-sm font-bold text-[#1C3322]">Kruger National Park &amp; Surrounding Areas</span>
                                     </div>
                                 </div>
@@ -132,16 +147,16 @@ export default function HomePage() {
                             </div>
                         </div>
 
-                        {/* Quick Action Box */}
+                        {/* Quick Action Card */}
                         <div className="lg:col-span-6 bg-[#1C3322] text-white p-8 sm:p-10 rounded-3xl border border-[#C2933D]/40 shadow-2xl">
-                            <span className="text-xs uppercase font-bold text-[#C2933D] tracking-widest block mb-2">
-                                Real-time availability
+                            <span className="text-xs uppercase font-bold text-[#DEAE59] tracking-widest block mb-2">
+                                Real-Time Availability
                             </span>
                             <h3 className="font-serif text-3xl font-bold text-white mb-4">
                                 Book Directly With Official Guides
                             </h3>
                             <p className="text-xs sm:text-sm text-stone-300 font-light leading-relaxed mb-8">
-                                Eliminate middlemen commissions. Booking directly with Safaric guarantees vehicle exclusivity options, direct radio contact with trackers, and customizable departure times.
+                                Eliminate third-party agent markups. Booking directly with SAFARIC guarantees vehicle exclusivity options, complimentary blankets/ponchos/water, and flexible departure schedules.
                             </p>
                             <button
                                 onClick={() => setModalOpen(true)}
