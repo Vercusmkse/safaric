@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Compass, Camera, Leaf, Search } from 'lucide-react';
+import { Compass, Camera, Sparkles, Search } from 'lucide-react';
 import { SAFARI_PACKAGES } from '@/data/packages';
 
 interface HeroProps {
@@ -40,7 +40,7 @@ const BACKGROUND_SLIDES: { src: string; alt: string }[] = [
 ];
 
 export default function Hero({ onQuickBook }: HeroProps) {
-    const [selectedPkg, setSelectedPkg] = useState(SAFARI_PACKAGES[0].id);
+    const [selectedPkg, setSelectedPkg] = useState(SAFARI_PACKAGES[0]?.id || 'pkg-morning-shared');
     const [selectedDate, setSelectedDate] = useState(() => {
         const d = new Date();
         d.setDate(d.getDate() + 1);
@@ -87,7 +87,7 @@ export default function Hero({ onQuickBook }: HeroProps) {
                     );
                 })}
 
-                {/* Clear, subtle scrim to keep text legible without dimming the image */}
+                {/* Subtle scrim to keep text legible without dimming the image */}
                 <div className="absolute inset-0 bg-black/30" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#122216]/90 via-transparent to-black/30" />
             </div>
@@ -95,7 +95,7 @@ export default function Hero({ onQuickBook }: HeroProps) {
             <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1C3322]/80 backdrop-blur-sm border border-[#C2933D]/50 text-[#EAD5A8] text-xs tracking-widest uppercase mb-6 shadow-lg">
                     <span className="w-2 h-2 rounded-full bg-[#C2933D] animate-ping" />
-                    Wildlife • People • Places • For a Brighter Tomorrow
+                    Wildlife • People • Places • Sustainable Safari Tourism
                 </div>
 
                 <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white leading-tight mb-4 drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
@@ -103,22 +103,36 @@ export default function Hero({ onQuickBook }: HeroProps) {
                 </h1>
 
                 <p className="font-sans text-stone-100 text-sm sm:text-lg max-w-2xl mx-auto font-light leading-relaxed mb-8 drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
-                    <strong className="font-semibold text-white tracking-wide">GUIDED SAFARIS &nbsp;|&nbsp; TRANSFERS &nbsp;|&nbsp; TAILOR-MADE EXPERIENCES</strong><br />
-                    Experience Africa’s greatest wilderness through elevated open 4x4 vehicles, certified indigenous trackers, and soul-stirring Big Five encounters.
+                    <strong className="font-semibold text-white tracking-wide">
+                        SHARED DRIVES (FROM R600) &nbsp;|&nbsp; PRIVATE 4x4 CHARTERS &nbsp;|&nbsp; PANORAMA TOURS
+                    </strong>
+                    <br />
+                    Experience Africa’s greatest wilderness through custom open safari vehicles, accredited indigenous trackers, and soul-stirring Big Five encounters.
                 </p>
 
-                {/* Badges */}
+                {/* Badges without FGASA */}
                 <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-stone-200 mb-10 drop-shadow-[0_1px_4px_rgba(0,0,0,0.6)]">
-                    <span className="flex items-center gap-1.5"><Compass className="w-4 h-4 text-[#C2933D]" /> FGASA Certified Field Guides</span>
-                    <span className="flex items-center gap-1.5"><Camera className="w-4 h-4 text-[#C2933D]" /> Custom Open 4x4 Tiered Vehicles</span>
-                    <span className="flex items-center gap-1.5"><Leaf className="w-4 h-4 text-[#C2933D]" /> Sustainable &amp; Conservation Driven</span>
+                    <span className="flex items-center gap-1.5">
+                        <Compass className="w-4 h-4 text-[#C2933D]" />
+                        Tourism Act Registered Nature Guides
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                        <Camera className="w-4 h-4 text-[#C2933D]" />
+                        Custom Open 4x4 Tiered Vehicles
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                        <Sparkles className="w-4 h-4 text-[#DEAE59]" />
+                        Free Blankets, Ponchos &amp; Spring Water
+                    </span>
                 </div>
 
                 {/* Quick Booking Engine Bar */}
                 <div className="bg-[#122216]/90 backdrop-blur-md p-4 sm:p-6 rounded-2xl border border-[#C2933D]/40 shadow-2xl max-w-4xl mx-auto text-left">
                     <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
                         <div>
-                            <label className="block text-[11px] uppercase tracking-wider text-[#C2933D] font-bold mb-1">Safari Experience</label>
+                            <label className="block text-[11px] uppercase tracking-wider text-[#C2933D] font-bold mb-1">
+                                Safari Experience
+                            </label>
                             <select
                                 value={selectedPkg}
                                 onChange={(e) => setSelectedPkg(e.target.value)}
@@ -126,14 +140,16 @@ export default function Hero({ onQuickBook }: HeroProps) {
                             >
                                 {SAFARI_PACKAGES.map((p) => (
                                     <option key={p.id} value={p.id} className="bg-[#122216] text-white">
-                                        {p.title}
+                                        {p.title} ({p.timing})
                                     </option>
                                 ))}
                             </select>
                         </div>
 
                         <div>
-                            <label className="block text-[11px] uppercase tracking-wider text-[#C2933D] font-bold mb-1">Preferred Date</label>
+                            <label className="block text-[11px] uppercase tracking-wider text-[#C2933D] font-bold mb-1">
+                                Preferred Date
+                            </label>
                             <input
                                 type="date"
                                 required
@@ -144,7 +160,9 @@ export default function Hero({ onQuickBook }: HeroProps) {
                         </div>
 
                         <div>
-                            <label className="block text-[11px] uppercase tracking-wider text-[#C2933D] font-bold mb-1">Guests</label>
+                            <label className="block text-[11px] uppercase tracking-wider text-[#C2933D] font-bold mb-1">
+                                Party Size
+                            </label>
                             <select
                                 value={guestCount}
                                 onChange={(e) => setGuestCount(Number(e.target.value))}
@@ -153,16 +171,19 @@ export default function Hero({ onQuickBook }: HeroProps) {
                                 <option value={1}>1 Solo Explorer</option>
                                 <option value={2}>2 Adults (Couple)</option>
                                 <option value={3}>3 Guests</option>
-                                <option value={4}>4 Guests (Family)</option>
-                                <option value={6}>6 Guests (Small Group)</option>
-                                <option value={10}>Private Vehicle Exclusive (Up to 10)</option>
+                                <option value={4}>4 Guests (Shared Min.)</option>
+                                <option value={5}>5 Guests</option>
+                                <option value={6}>6 Guests</option>
+                                <option value={7}>7 Guests</option>
+                                <option value={8}>8 Guests</option>
+                                <option value={9}>9 Guests (Max / Sole Vehicle)</option>
                             </select>
                         </div>
 
                         <div>
                             <button
                                 type="submit"
-                                className="w-full bg-gradient-to-r from-[#C2933D] to-[#DEAE59] text-[#122216] font-bold py-2.5 px-4 rounded-lg text-xs uppercase tracking-wider transition hover:brightness-110 shadow flex items-center justify-center gap-2"
+                                className="w-full bg-gradient-to-r from-[#C2933D] to-[#DEAE59] text-[#122216] font-bold py-2.5 px-4 rounded-lg text-xs uppercase tracking-wider transition hover:brightness-110 shadow flex items-center justify-center gap-2 cursor-pointer"
                             >
                                 <Search className="w-4 h-4" />
                                 <span>Check &amp; Book</span>
@@ -171,7 +192,7 @@ export default function Hero({ onQuickBook }: HeroProps) {
                     </form>
                 </div>
 
-                {/* Subtle Interactive Slide Indicators */}
+                {/* Interactive Slide Indicators */}
                 <div className="flex items-center justify-center gap-2 mt-6">
                     {BACKGROUND_SLIDES.map((_, index) => (
                         <button
@@ -179,7 +200,7 @@ export default function Hero({ onQuickBook }: HeroProps) {
                             type="button"
                             onClick={() => setCurrentImageIndex(index)}
                             aria-label={`Switch to safari background ${index + 1}`}
-                            className={`h-1.5 rounded-full transition-all duration-300 ${
+                            className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
                                 index === currentImageIndex
                                     ? 'w-6 bg-[#C2933D]'
                                     : 'w-2 bg-white/40 hover:bg-white/70'

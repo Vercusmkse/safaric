@@ -8,6 +8,9 @@ import BigFiveShowcase from '@/components/safari/BigFiveShowcase';
 import ServicesSection from '@/components/safari/ServicesSection';
 import ImpactSection from '@/components/safari/ImpactSection';
 import BookingModal from '@/components/booking/BookingModal';
+import { StickyBookingBar } from '@/components/booking/StickyBookingBar';
+import { DiurnalTimeline } from '@/components/safari/DiurnalTimeline';
+import { GuideShowcase } from '@/components/safari/GuideShowcase';
 import { SafariPackage } from '@/types/safari';
 import { Phone, Mail, MapPin, Globe } from 'lucide-react';
 
@@ -29,27 +32,50 @@ export default function HomePage() {
         setModalOpen(true);
     };
 
+    const handleStickyBarBook = (pkgId: string, adults: number) => {
+        setActivePackageId(pkgId);
+        setActiveAdults(adults);
+        setModalOpen(true);
+    };
+
     return (
-        <main className="min-h-screen flex flex-col">
+        <main className="min-h-screen flex flex-col bg-[#0d1610] text-stone-100">
+            {/* Global Navigation */}
             <Navbar onOpenBooking={() => setModalOpen(true)} />
 
+            {/* Sticky Real-Time Booking Bar (Appears on scroll past 350px) */}
+            <StickyBookingBar onOpenBookingModal={handleStickyBarBook} />
+
+            {/* Hero Section */}
             <Hero onQuickBook={handleHeroQuickBook} />
 
+            {/* Packages Grid (Affordable Luxury Flagships & Day Drives) */}
             <PackageSection onSelectPackage={handleSelectPackage} />
 
+            {/* Interactive "Day in the Bush" Diurnal Engine */}
+            <DiurnalTimeline />
+
+            {/* Big Five Wildlife Field Guide */}
             <BigFiveShowcase />
 
+            {/* Verified FGASA Field Guides & Tracking Specialists */}
+            <GuideShowcase />
+
+            {/* Logistics & Ground Services */}
             <ServicesSection />
 
+            {/* Carbon-Neutral & Community Impact */}
             <ImpactSection />
 
             {/* Inquiry & Direct Contact Details */}
-            <section id="contact" className="py-20 bg-[#F7F4EC] border-t border-stone-200">
+            <section id="contact" className="py-20 bg-[#F7F4EC] border-t border-stone-200 text-stone-900">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 
                         <div className="lg:col-span-6 space-y-6">
-                            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#C2933D]">Direct Reservations</span>
+                            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#C2933D]">
+                                Direct Reservations
+                            </span>
                             <h2 className="font-serif text-3xl sm:text-5xl font-bold text-[#1C3322]">
                                 Start Planning Your Kruger Journey
                             </h2>
@@ -58,7 +84,10 @@ export default function HomePage() {
                             </p>
 
                             <div className="space-y-4 pt-2">
-                                <a href="tel:+27836213226" className="flex items-center gap-4 p-4 rounded-xl bg-white border border-stone-200 shadow-sm hover:border-[#C2933D] transition">
+                                <a
+                                    href="tel:+27836213226"
+                                    className="flex items-center gap-4 p-4 rounded-xl bg-white border border-stone-200 shadow-sm hover:border-[#C2933D] transition"
+                                >
                                     <div className="w-10 h-10 rounded-lg bg-[#1C3322] text-[#C2933D] flex items-center justify-center flex-shrink-0">
                                         <Phone className="w-5 h-5" />
                                     </div>
@@ -68,7 +97,10 @@ export default function HomePage() {
                                     </div>
                                 </a>
 
-                                <a href="mailto:info@safaric.co.za" className="flex items-center gap-4 p-4 rounded-xl bg-white border border-stone-200 shadow-sm hover:border-[#C2933D] transition">
+                                <a
+                                    href="mailto:info@safaric.co.za"
+                                    className="flex items-center gap-4 p-4 rounded-xl bg-white border border-stone-200 shadow-sm hover:border-[#C2933D] transition"
+                                >
                                     <div className="w-10 h-10 rounded-lg bg-[#1C3322] text-[#C2933D] flex items-center justify-center flex-shrink-0">
                                         <Mail className="w-5 h-5" />
                                     </div>
@@ -102,14 +134,18 @@ export default function HomePage() {
 
                         {/* Quick Action Box */}
                         <div className="lg:col-span-6 bg-[#1C3322] text-white p-8 sm:p-10 rounded-3xl border border-[#C2933D]/40 shadow-2xl">
-                            <span className="text-xs uppercase font-bold text-[#C2933D] tracking-widest block mb-2">Real-time availability</span>
-                            <h3 className="font-serif text-3xl font-bold text-white mb-4">Book Directly With Official Guides</h3>
+                            <span className="text-xs uppercase font-bold text-[#C2933D] tracking-widest block mb-2">
+                                Real-time availability
+                            </span>
+                            <h3 className="font-serif text-3xl font-bold text-white mb-4">
+                                Book Directly With Official Guides
+                            </h3>
                             <p className="text-xs sm:text-sm text-stone-300 font-light leading-relaxed mb-8">
                                 Eliminate middlemen commissions. Booking directly with Safaric guarantees vehicle exclusivity options, direct radio contact with trackers, and customizable departure times.
                             </p>
                             <button
                                 onClick={() => setModalOpen(true)}
-                                className="w-full bg-gradient-to-r from-[#C2933D] to-[#DEAE59] text-[#122216] font-bold py-3.5 px-6 rounded-xl text-xs uppercase tracking-wider transition hover:brightness-110 shadow-lg"
+                                className="w-full bg-gradient-to-r from-[#C2933D] to-[#DEAE59] text-[#122216] font-bold py-3.5 px-6 rounded-xl text-xs uppercase tracking-wider transition hover:brightness-110 shadow-lg cursor-pointer"
                             >
                                 Launch Booking Engine
                             </button>

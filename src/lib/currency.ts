@@ -8,7 +8,7 @@ export const CURRENCIES: Record<CurrencyCode, { symbol: string; label: string; r
 };
 
 export function formatPrice(amountInZar: number, currency: CurrencyCode): string {
-    const target = CURRENCIES[currency];
+    const target = CURRENCIES[currency] || CURRENCIES.ZAR;
     const converted = Math.round(amountInZar * target.rate);
     return `${target.symbol} ${converted.toLocaleString()}`;
 }
@@ -20,6 +20,7 @@ export function computeTotalZAR(params: {
     children: number;
     includeBreakfast: boolean;
     includeLensRental: boolean;
+    privateVehicleBuyout?: boolean;
 }): number {
     let subtotal = 0;
     if (params.isVehicleRate) {
@@ -33,8 +34,29 @@ export function computeTotalZAR(params: {
         subtotal += (params.adults + params.children) * 180;
     }
     if (params.includeLensRental) {
-        subtotal += 650;
+        subtotal += 2800; // Professional Sony Alpha + Telephoto rental package
+    }
+    if (params.privateVehicleBuyout) {
+        subtotal += 6500; // Private OSV exclusivity buyout per day
     }
 
     return Math.round(subtotal);
+}
+
+export function computeDepositBreakdown(totalZar: number, currency: CurrencyCode) {
+    const target = CURRENCIES[currency] || CURRENCIES.ZAR;
+    const totalConverted = Math.round(totalZar * target.rate);
+    const depositConverted = Math.round(totalConverted * 0.20);
+    const balanceConverted = totalConverted - depositConverted;
+
+    return {
+        totalFormatted: `${target.symbol} ${totalConverted.toLocaleString()}`,
+        depositFormatted: `${target.symbol} ${depositConverted.toLocaleString()}`,
+        balanceFormatted: `${target.symbol} ${balanceConverted.toLocaleString()}`,
+        raw: {
+            total: totalConverted,
+            deposit: depositConverted,
+            balance: balanceConverted,
+        },
+    };
 }

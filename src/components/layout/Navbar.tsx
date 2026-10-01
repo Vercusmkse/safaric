@@ -26,9 +26,9 @@ export default function Navbar({ onOpenBooking }: NavbarProps) {
                             Kruger National Park &amp; Surrounding Areas, South Africa
                         </span>
                         <span className="hidden md:inline text-[#2B4D34]">|</span>
-                        <span className="hidden md:flex items-center gap-1 text-emerald-400">
-                            <ShieldCheck className="w-3.5 h-3.5" />
-                            FGASA Certified Field Guides
+                        <span className="hidden md:flex items-center gap-1 text-[#DEAE59]">
+                            <ShieldCheck className="w-3.5 h-3.5 text-[#C2933D]" />
+                            Tourism Act Registered Nature Guides
                         </span>
                     </div>
 
@@ -107,7 +107,7 @@ export default function Navbar({ onOpenBooking }: NavbarProps) {
 
                         <button
                             onClick={onOpenBooking}
-                            className="bg-gradient-to-r from-[#C2933D] via-[#DEAE59] to-[#C2933D] text-[#122216] font-bold text-xs sm:text-sm px-5 py-2.5 rounded-full shadow-lg hover:brightness-105 transition transform active:scale-95 flex items-center gap-2"
+                            className="bg-gradient-to-r from-[#C2933D] via-[#DEAE59] to-[#C2933D] text-[#122216] font-bold text-xs sm:text-sm px-5 py-2.5 rounded-full shadow-lg hover:brightness-105 transition transform active:scale-95 flex items-center gap-2 cursor-pointer"
                         >
                             <Calendar className="w-4 h-4" />
                             <span>Book Safari</span>
@@ -115,7 +115,7 @@ export default function Navbar({ onOpenBooking }: NavbarProps) {
 
                         <button
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                            className="lg:hidden p-2 text-stone-200 hover:text-white"
+                            className="lg:hidden p-2 text-stone-200 hover:text-white cursor-pointer"
                             aria-label="Toggle menu"
                         >
                             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -133,7 +133,7 @@ export default function Navbar({ onOpenBooking }: NavbarProps) {
                         <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block text-stone-200 hover:text-[#C2933D] py-1 text-sm">Contact Us</a>
                         <button
                             onClick={() => { setMobileMenuOpen(false); onOpenBooking(); }}
-                            className="w-full bg-[#C2933D] text-[#122216] font-bold py-2.5 rounded-lg text-sm shadow"
+                            className="w-full bg-gradient-to-r from-[#C2933D] to-[#DEAE59] text-[#122216] font-bold py-2.5 rounded-lg text-sm shadow cursor-pointer"
                         >
                             Book Safari Today
                         </button>
