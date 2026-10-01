@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Coffee, Binoculars, Utensils, Moon, Flame, Sun } from 'lucide-react';
+import { Coffee, Binoculars, Utensils, Sun, Compass, Sunset, CheckCircle2 } from 'lucide-react';
 
 interface DiurnalSlot {
     time: string;
@@ -13,45 +13,45 @@ interface DiurnalSlot {
 const DIURNAL_SCHEDULE: DiurnalSlot[] = [
     {
         time: '05:00 – 05:30',
-        title: 'Dawn Wake-Up & Verandah Coffee',
-        description: 'Artisanal rusks and fresh French-press coffee served on private room verandahs as morning bird calls announce first light.',
+        title: 'Dawn Pickups & Gate Staging',
+        description: 'Complimentary morning pickup from Ngwenya Lodge, Marloth Park, Crocodile Bridge, or Lower Sabie. Settle into custom open 4x4 vehicles with complimentary warm fleece blankets, rain ponchos, and chilled spring water.',
         icon: Coffee,
     },
     {
         time: '05:30 – 09:30',
         title: 'First-Light Predator Tracking',
-        description: 'Traverse Kruger river loops in custom 6-seat vehicles during the coolest hours when big cats conclude active nocturnal hunts.',
+        description: 'Enter Kruger gates at opening light. Our registered nature guides follow fresh tracks, bird alarm calls, and river loops during the coolest hours when lions, leopards, and wild dogs conclude night hunts.',
         icon: Binoculars,
     },
     {
         time: '09:30 – 10:30',
-        title: 'Wilderness Bush Breakfast',
-        description: 'Gourmet hot picnic breakfast served at an authorized scenic river overlook or shaded wilderness rest site.',
+        title: 'Rest Camp Breakfast Stop (~1 Hour)',
+        description: 'A dedicated one-hour stop at an authorized SANParks rest camp (such as Lower Sabie or Crocodile Bridge). Enjoy breakfast, stretch your legs, and use campsite facilities (meals are for your own account).',
         icon: Utensils,
     },
     {
-        time: '13:00 – 15:30',
-        title: 'High-Heat Siesta & Solar Lodge Rest',
-        description: 'Multi-course light lunch, swimming pool leisure, camera download stations, and siesta during midday heat.',
+        time: '10:30 – 13:00',
+        title: 'Midday Waterhole & River Loops',
+        description: 'Explore active water points and riverine corridors as elephant breeding herds, buffalos, giraffes, and plains game congregate to drink and wallow during the warmer midday hours.',
+        icon: Compass,
+    },
+    {
+        time: '13:00 – 14:00',
+        title: 'Midday Lunch Break (~1 Hour)',
+        description: 'A relaxed one-hour rest stop at a park campsite/cafeteria to escape the midday heat, have lunch, and browse the park shop before the afternoon run (meals for own account).',
         icon: Sun,
     },
     {
-        time: '16:00 – 18:30',
-        title: 'Dusk Drive & Elevated Sundowners',
-        description: 'Afternoon tracking culminating in traditional gin & tonics and charcuterie at an elevated lowveld viewpoint as the sun sets.',
-        icon: Sun,
+        time: '14:45 – 18:00',
+        title: 'Afternoon & Golden Hour Safari',
+        description: 'Traverse southern game corridors as afternoon temperatures ease. Golden hour photography lighting illuminates active game before gates close at dusk.',
+        icon: Sunset,
     },
     {
-        time: '18:30 – 19:30',
-        title: 'Nocturnal Spotlight Search',
-        description: 'High-powered red-filtered spotlighting for elusive nocturnal species: leopards, civets, bushbabies, and owls.',
-        icon: Moon,
-    },
-    {
-        time: '19:30 – 21:30',
-        title: 'Private Concession Boma Braai',
-        description: 'Multi-course braai dinner cooked over open hardwood coals around a roaring central firepit with guide debriefs.',
-        icon: Flame,
+        time: '18:00',
+        title: 'Gate Clearance & Lodge Return',
+        description: 'Exit park gates before closing time and transit directly back to your lodge or rest camp with full sightings logged by your guide.',
+        icon: CheckCircle2,
     },
 ];
 
@@ -73,7 +73,7 @@ export function DiurnalTimeline() {
                         A Day in the Kruger Bush
                     </h2>
                     <p className="mt-3 text-stone-600 text-sm sm:text-base font-light leading-relaxed">
-                        From dawn coffee to fireside star debriefs—explore how our days align with natural wildlife movements.
+                        From dawn gate openings to golden hour tracking—explore how our game drives align with natural wildlife movements and rest camp stopovers.
                     </p>
                 </div>
 
@@ -128,3 +128,5 @@ export function DiurnalTimeline() {
         </section>
     );
 }
+
+export default DiurnalTimeline;
