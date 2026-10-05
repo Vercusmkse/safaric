@@ -65,6 +65,7 @@ export interface BookingFormData {
     phone: string;
     notes?: string;
     includeBreakfast?: boolean;
+    includeLensRental?: boolean;
 }
 
 export interface BookingResponse {
