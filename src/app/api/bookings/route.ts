@@ -4,6 +4,8 @@ import { SAFARI_PACKAGES } from '@/data/packages';
 import { computeSafariTotalZAR, computeGateFeesZAR } from '@/lib/currency';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: Request) {
     try {
         const payload: BookingFormData = await request.json();
