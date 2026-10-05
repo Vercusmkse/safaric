@@ -2,12 +2,13 @@ import { NextResponse } from 'next/server';
 import { BookingFormData, BookingResponse } from '@/types/safari';
 import { SAFARI_PACKAGES } from '@/data/packages';
 import { computeSafariTotalZAR, computeGateFeesZAR } from '@/lib/currency';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export async function POST(request: Request) {
     try {
         const payload: BookingFormData = await request.json();
 
-        // 1. Data Validation
+        // 1. Validation
         if (!payload.fullName || !payload.email || !payload.date || !payload.packageId) {
             return NextResponse.json<BookingResponse>(
                 {
@@ -23,7 +24,6 @@ export async function POST(request: Request) {
             );
         }
 
-        // 2. Package Validation
         const pkg = SAFARI_PACKAGES.find((p) => p.id === payload.packageId);
         if (!pkg) {
             return NextResponse.json<BookingResponse>(
@@ -44,7 +44,7 @@ export async function POST(request: Request) {
         const children = Number(payload.children) || 0;
         const residency = payload.residency || 'international';
 
-        // 3. Compute Safari Drive Total (Free Blankets, Ponchos & Water included)
+        // 2. Calculations
         const safariTotalZAR = computeSafariTotalZAR({
             basePriceZAR: pkg.basePriceZAR,
             isVehicleRate: pkg.isVehicleRate,
@@ -52,13 +52,37 @@ export async function POST(request: Request) {
             children,
         });
 
-        // 4. Compute Estimated Gate Fees & Split Deposits
         const estimatedGateFeesZAR = computeGateFeesZAR(residency, adults, children);
         const depositZAR = Math.round(safariTotalZAR * 0.20);
         const balanceZAR = safariTotalZAR - depositZAR;
-
-        // 5. Generate Reference ID
         const referenceNumber = `SAF-${Math.floor(100000 + Math.random() * 900000)}`;
+
+        // 3. Persist to Database
+        const { error: dbError } = await supabaseAdmin.from('bookings').insert([
+            {
+                reference_number: referenceNumber,
+                package_id: pkg.id,
+                package_title: pkg.title,
+                safari_date: payload.date,
+                adults,
+                children,
+                residency,
+                pickup_point: payload.pickupPoint,
+                full_name: payload.fullName,
+                email: payload.email,
+                phone: payload.phone,
+                notes: payload.notes || '',
+                safari_total_zar: safariTotalZAR,
+                estimated_gate_fees_zar: estimatedGateFeesZAR,
+                deposit_zar: depositZAR,
+                balance_zar: balanceZAR,
+                status: 'pending',
+            },
+        ]);
+
+        if (dbError) {
+            console.error('Database Insertion Error:', dbError);
+        }
 
         return NextResponse.json<BookingResponse>(
             {
