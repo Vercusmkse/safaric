@@ -2,6 +2,15 @@ export type CurrencyCode = 'ZAR' | 'USD' | 'EUR' | 'GBP';
 
 export type ResidencyType = 'international' | 'sadc' | 'south-african';
 
+export type DocumentType = 'sa_id' | 'passport';
+
+export interface GuestManifestItem {
+    fullName: string;
+    documentType: DocumentType;
+    documentNumber: string;
+    nationality: string;
+}
+
 export interface GuideProfile {
     id: string;
     name: string;
@@ -66,6 +75,11 @@ export interface BookingFormData {
     notes?: string;
     includeBreakfast?: boolean;
     includeLensRental?: boolean;
+    // SANParks Gate Permit Identification
+    idType?: DocumentType;
+    idNumber?: string;
+    nationality?: string;
+    guestManifest?: GuestManifestItem[];
 }
 
 export interface BookingResponse {
