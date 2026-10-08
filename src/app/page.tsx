@@ -3,14 +3,15 @@
 import React, { useState } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Hero from '@/components/safari/Hero';
+import FreeAmenitiesSection from '@/components/safari/FreeAmenitiesSection';
 import PackageSection from '@/components/safari/PackageSection';
+import AttractionsGallery from '@/components/safari/AttractionsGallery';
 import BigFiveShowcase from '@/components/safari/BigFiveShowcase';
 import ServicesSection from '@/components/safari/ServicesSection';
 import ImpactSection from '@/components/safari/ImpactSection';
 import BookingModal from '@/components/booking/BookingModal';
 import StickyBookingBar from '@/components/booking/StickyBookingBar';
 import { DiurnalTimeline } from '@/components/safari/DiurnalTimeline';
-// import { GuideShowcase } from '@/components/safari/GuideShowcase'; // Temporarily hidden
 import { SafariPackage } from '@/types/safari';
 import { Phone, Mail, MapPin, Globe, MessageCircle } from 'lucide-react';
 
@@ -49,17 +50,20 @@ export default function HomePage() {
             {/* Hero Section */}
             <Hero onQuickBook={handleHeroQuickBook} />
 
-            {/* Packages Grid */}
+            {/* Inclusive Hospitality: Free Amenities & Complimentary Features */}
+            <FreeAmenitiesSection />
+
+            {/* Safari Expeditions & Pricing Grid */}
             <PackageSection onSelectPackage={handleSelectPackage} />
 
-            {/* Interactive "Day in the Bush" Diurnal Engine */}
+            {/* Real Field Sightings & Wildlife Attractions Gallery */}
+            <AttractionsGallery />
+
+            {/* Interactive "Day in the Bush" Diurnal Timeline */}
             <DiurnalTimeline />
 
             {/* Big Five Wildlife Field Guide */}
             <BigFiveShowcase />
-
-            {/* Guide Showcase (Preserved in code, hidden from display) */}
-            {/* <GuideShowcase /> */}
 
             {/* Logistics & Ground Services */}
             <ServicesSection />
@@ -67,14 +71,14 @@ export default function HomePage() {
             {/* Conservation & Community Impact */}
             <ImpactSection />
 
-            {/* Inquiry & Direct Contact Details */}
+            {/* Direct Contact & Operations Desk */}
             <section id="contact" className="py-20 bg-[#F7F4EC] border-t border-stone-200 text-stone-900">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 
                         <div className="lg:col-span-6 space-y-6">
                             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#C2933D]">
-                                Direct Reservations
+                                Direct Reservations Desk
                             </span>
                             <h2 className="font-serif text-3xl sm:text-5xl font-bold text-[#1C3322]">
                                 Start Planning Your Kruger Journey
@@ -113,7 +117,7 @@ export default function HomePage() {
                                 </a>
 
                                 <a
-                                    href="mailto:info@safaric.co.za"
+                                    href="mailto:reservations@safarictours.com"
                                     className="flex items-center gap-4 p-4 rounded-xl bg-white border border-stone-200 shadow-sm hover:border-[#C2933D] transition"
                                 >
                                     <div className="w-10 h-10 rounded-lg bg-[#1C3322] text-[#C2933D] flex items-center justify-center flex-shrink-0">
@@ -121,7 +125,7 @@ export default function HomePage() {
                                     </div>
                                     <div>
                                         <span className="text-[10px] text-stone-400 uppercase font-semibold block">Email Operations</span>
-                                        <span className="text-sm font-bold text-[#1C3322]">info@safaric.co.za</span>
+                                        <span className="text-sm font-bold text-[#1C3322]">reservations@safarictours.com</span>
                                     </div>
                                 </a>
 
@@ -131,7 +135,7 @@ export default function HomePage() {
                                     </div>
                                     <div>
                                         <span className="text-[10px] text-stone-400 uppercase font-semibold block">Operational Hub</span>
-                                        <span className="text-sm font-bold text-[#1C3322]">Kruger National Park &amp; Surrounding Areas</span>
+                                        <span className="text-sm font-bold text-[#1C3322]">Kruger National Park &amp; Hazyview, Mpumalanga</span>
                                     </div>
                                 </div>
 
@@ -141,13 +145,13 @@ export default function HomePage() {
                                     </div>
                                     <div>
                                         <span className="text-[10px] text-stone-400 uppercase font-semibold block">Official Website</span>
-                                        <span className="text-sm font-bold text-[#1C3322]">www.safaric.co.za</span>
+                                        <span className="text-sm font-bold text-[#1C3322]">safarictours.com</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Quick Action Card */}
+                        {/* Direct Booking Card */}
                         <div className="lg:col-span-6 bg-[#1C3322] text-white p-8 sm:p-10 rounded-3xl border border-[#C2933D]/40 shadow-2xl">
                             <span className="text-xs uppercase font-bold text-[#DEAE59] tracking-widest block mb-2">
                                 Real-Time Availability
@@ -177,7 +181,7 @@ export default function HomePage() {
                         PEOPLE &nbsp;|&nbsp; WILDLIFE &nbsp;|&nbsp; CONSERVATION &nbsp;|&nbsp; SUSTAINABLE TOURISM
                     </div>
                     <p className="text-xs text-stone-500">
-                        &copy; 2026 SAFARIC. All rights reserved. Registered South African Safari Tour Operator.
+                        &copy; 2026 SAFARIC. All rights reserved. Registered South African Safari Tour Operator under the Tourism Act.
                     </p>
                 </div>
             </footer>
