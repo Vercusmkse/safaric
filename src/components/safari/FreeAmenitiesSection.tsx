@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Eye, Droplets, ShieldCheck, FileCheck, Clock, Shield, Sparkles } from 'lucide-react';
+import { Eye, Droplets, ShieldCheck, Sparkles } from 'lucide-react';
 
 interface Perk {
     icon: React.ComponentType<{ className?: string }>;
@@ -29,24 +29,6 @@ const INCLUDED_PERKS: Perk[] = [
         description: 'Heavy fleece-lined safari ponchos and wind-guards provided for crisp 05:30 AM open vehicle departures into Kruger.',
         badge: 'Full Weather Comfort',
     },
-    {
-        icon: FileCheck,
-        title: 'SANParks Gate Pre-Clearance',
-        description: 'We register and verify your SA ID or passport permits before departure, bypassing standard public queuing at Kruger entrance gates.',
-        badge: 'Skip the Gate Queues',
-    },
-    {
-        icon: Clock,
-        title: 'Hazyview Lodge Transfers',
-        description: 'Door-to-door morning collection and afternoon drop-off from any hotel or guest lodge across the greater Hazyview area.',
-        badge: 'Zero Transfer Fee',
-    },
-    {
-        icon: Shield,
-        title: 'Official Tourism Act Accreditation',
-        description: 'Full commercial passenger liability coverage and certified SANParks Kruger field guides leading every open cruiser.',
-        badge: '100% Licensed & Insured',
-    },
 ];
 
 export default function FreeAmenitiesSection() {
@@ -66,7 +48,7 @@ export default function FreeAmenitiesSection() {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {INCLUDED_PERKS.map((perk) => {
                         const Icon = perk.icon;
                         return (
