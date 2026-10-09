@@ -5,8 +5,8 @@ import Navbar from '@/components/layout/Navbar';
 import Hero from '@/components/safari/Hero';
 import FreeAmenitiesSection from '@/components/safari/FreeAmenitiesSection';
 import PackageSection from '@/components/safari/PackageSection';
-import AttractionsGallery from '@/components/safari/AttractionsGallery';
 import BigFiveShowcase from '@/components/safari/BigFiveShowcase';
+import CategorizedGallery from '@/components/safari/CategorizedGallery';
 import ServicesSection from '@/components/safari/ServicesSection';
 import ImpactSection from '@/components/safari/ImpactSection';
 import BookingModal from '@/components/booking/BookingModal';
@@ -50,20 +50,20 @@ export default function HomePage() {
             {/* Hero Section */}
             <Hero onQuickBook={handleHeroQuickBook} />
 
-            {/* Inclusive Hospitality: Free Amenities & Complimentary Features */}
+            {/* Inclusive Bush Amenities (Binoculars, Waters, Ponchos) */}
             <FreeAmenitiesSection />
 
             {/* Safari Expeditions & Pricing Grid */}
             <PackageSection onSelectPackage={handleSelectPackage} />
 
-            {/* Real Field Sightings & Wildlife Attractions Gallery */}
-            <AttractionsGallery />
+            {/* Flagship Big Five Field Encounters */}
+            <BigFiveShowcase />
+
+            {/* Categorized Field Photo Archive (Wild Dogs, Birds, Predators, Giants) */}
+            <CategorizedGallery />
 
             {/* Interactive "Day in the Bush" Diurnal Timeline */}
             <DiurnalTimeline />
-
-            {/* Big Five Wildlife Field Guide */}
-            <BigFiveShowcase />
 
             {/* Logistics & Ground Services */}
             <ServicesSection />
