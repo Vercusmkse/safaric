@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BookingFormData, BookingResponse, DocumentType } from '@/types/safari';
 import { SAFARI_PACKAGES } from '@/data/packages';
 import { useCurrency } from '@/context/CurrencyContext';
@@ -374,7 +374,6 @@ function BookingFormView(props: BookingFormViewProps) {
                     </span>
                 </div>
 
-                {/* Touch-Friendly Stepper Buttons */}
                 <div className="grid grid-cols-2 gap-3 mb-3">
                     <div className="bg-stone-50 border border-stone-200 p-2.5 rounded-xl">
                         <span className="block text-[11px] font-bold text-stone-700 mb-1.5">
@@ -668,13 +667,12 @@ function BookingFormView(props: BookingFormViewProps) {
     );
 }
 
-export default function BookingModal({
-                                         isOpen,
-                                         onClose,
-                                         defaultPackageId,
-                                         defaultDate,
-                                         defaultAdults = 2,
-                                     }: BookingModalProps) {
+function BookingModalInner({
+                               onClose,
+                               defaultPackageId,
+                               defaultDate,
+                               defaultAdults = 2,
+                           }: Omit<BookingModalProps, 'isOpen'>) {
     const { format } = useCurrency();
 
     const [packageId, setPackageId] = useState(defaultPackageId || SAFARI_PACKAGES[0].id);
@@ -700,17 +698,6 @@ export default function BookingModal({
     const [loading, setLoading] = useState(false);
     const [apiResult, setApiResult] = useState<BookingResponse | null>(null);
     const [errorMessage, setErrorMessage] = useState('');
-
-    // Synchronize props when opening or selecting a package
-    useEffect(() => {
-        if (isOpen) {
-            if (defaultPackageId) setPackageId(defaultPackageId);
-            if (defaultDate) setDate(defaultDate);
-            if (defaultAdults) setAdults(defaultAdults);
-        }
-    }, [isOpen, defaultPackageId, defaultDate, defaultAdults]);
-
-    if (!isOpen) return null;
 
     const currentPkg = SAFARI_PACKAGES.find((p) => p.id === packageId) || SAFARI_PACKAGES[0];
 
@@ -842,5 +829,19 @@ export default function BookingModal({
                 )}
             </div>
         </div>
+    );
+}
+
+export default function BookingModal(props: BookingModalProps) {
+    if (!props.isOpen) return null;
+
+    return (
+        <BookingModalInner
+            key={`${props.defaultPackageId || 'default'}-${props.defaultDate || 'none'}-${props.defaultAdults || 2}`}
+            onClose={props.onClose}
+            defaultPackageId={props.defaultPackageId}
+            defaultDate={props.defaultDate}
+            defaultAdults={props.defaultAdults}
+        />
     );
 }
