@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BookingFormData, BookingResponse, DocumentType } from '@/types/safari';
 import { SAFARI_PACKAGES } from '@/data/packages';
 import { useCurrency } from '@/context/CurrencyContext';
@@ -15,9 +15,10 @@ import {
     ShieldCheck,
     FileText,
     Sparkles,
-    Compass,
     MapPin,
-    Users
+    Users,
+    Minus,
+    Plus
 } from 'lucide-react';
 
 interface BookingModalProps {
@@ -36,7 +37,6 @@ interface ConfirmationScreenProps {
     readonly childrenCount: number;
     readonly pickupPoint: string;
     readonly dropoffPoint: string;
-    readonly safariRoute: string;
     readonly idNumber: string;
     readonly idType: DocumentType;
     readonly fullName: string;
@@ -66,7 +66,6 @@ function BookingConfirmationScreen({
                                        childrenCount,
                                        pickupPoint,
                                        dropoffPoint,
-                                       safariRoute,
                                        idNumber,
                                        idType,
                                        fullName,
@@ -111,7 +110,6 @@ function BookingConfirmationScreen({
             `*Name:* ${encodeURIComponent(fullName)}%0A` +
             `*ID / Passport:* ${encodeURIComponent(idNumber)} (${docLabel})%0A` +
             `*Experience:* ${encodeURIComponent(packageTitle)}%0A` +
-            `*Route:* ${encodeURIComponent(safariRoute)}%0A` +
             `*Date:* ${date}%0A` +
             `*Party:* ${adults} Adults${childManifest}%0A` +
             `*Pickup:* ${encodeURIComponent(pickupPoint)}%0A` +
@@ -156,10 +154,6 @@ function BookingConfirmationScreen({
                 <div className="flex justify-between border-b border-[#C2933D]/20 pb-1">
                     <span className="text-stone-600">Experience:</span>
                     <span className="font-bold text-[#1C3322] text-right">{packageTitle}</span>
-                </div>
-                <div className="flex justify-between">
-                    <span className="text-stone-600">Route & Gate:</span>
-                    <span className="text-stone-900 font-medium text-right">{safariRoute}</span>
                 </div>
                 <div className="flex justify-between">
                     <span className="text-stone-600">Date:</span>
@@ -259,8 +253,6 @@ interface BookingFormViewProps {
     readonly setPickupPoint: (pickup: string) => void;
     readonly dropoffPoint: string;
     readonly setDropoffPoint: (dropoff: string) => void;
-    readonly safariRoute: string;
-    readonly setSafariRoute: (route: string) => void;
     readonly includeBreakfast: boolean;
     readonly setIncludeBreakfast: (include: boolean) => void;
     readonly includeLensRental: boolean;
@@ -302,7 +294,7 @@ function BookingFormView(props: BookingFormViewProps) {
     const estimatedBalance = computedZAR - estimatedDeposit;
 
     return (
-        <form onSubmit={props.onSubmit} className="p-6 space-y-5 text-stone-900">
+        <form onSubmit={props.onSubmit} className="p-4 sm:p-6 space-y-5 text-stone-900">
             {props.errorMessage && (
                 <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center gap-2">
                     <AlertCircle className="w-4 h-4 text-rose-600 flex-shrink-0" />
@@ -310,29 +302,29 @@ function BookingFormView(props: BookingFormViewProps) {
                 </div>
             )}
 
-            {/* Complimentary Amenities Banner */}
-            <div className="bg-emerald-50/90 border border-emerald-200 rounded-2xl p-4 shadow-sm">
+            {/* Free Inclusions Banner */}
+            <div className="bg-emerald-50/90 border border-emerald-200 rounded-2xl p-3.5 sm:p-4 shadow-sm">
                 <div className="flex items-center gap-2 text-emerald-900 font-bold text-xs uppercase tracking-wider mb-2">
                     <Sparkles className="w-4 h-4 text-emerald-600" />
-                    <span>All Bookings Include Complimentary Bush Amenities (No Charge)</span>
+                    <span>All Bookings Include Complimentary Amenities</span>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] text-emerald-800 font-medium">
                     <div className="flex items-center gap-1.5 bg-white/70 px-2 py-1.5 rounded-lg border border-emerald-100">
-                        <span className="text-emerald-600 font-bold">✓</span> Game Binoculars
+                        <span className="text-emerald-600 font-bold">✓</span> Optics
                     </div>
                     <div className="flex items-center gap-1.5 bg-white/70 px-2 py-1.5 rounded-lg border border-emerald-100">
-                        <span className="text-emerald-600 font-bold">✓</span> Chilled Bottled Water
+                        <span className="text-emerald-600 font-bold">✓</span> Cold Water
                     </div>
                     <div className="flex items-center gap-1.5 bg-white/70 px-2 py-1.5 rounded-lg border border-emerald-100">
-                        <span className="text-emerald-600 font-bold">✓</span> Fleece Ponchos
+                        <span className="text-emerald-600 font-bold">✓</span> Ponchos
                     </div>
                     <div className="flex items-center gap-1.5 bg-white/70 px-2 py-1.5 rounded-lg border border-emerald-100">
-                        <span className="text-emerald-600 font-bold">✓</span> Gate Pre-clearance
+                        <span className="text-emerald-600 font-bold">✓</span> Gate Clearance
                     </div>
                 </div>
             </div>
 
-            {/* Step 1: Experience & Timing */}
+            {/* Step 1: Select Safari Package & Date */}
             <div>
                 <div className="block text-xs font-bold uppercase tracking-wider text-[#1C3322] mb-1.5">
                     1. Select Safari &amp; Date
@@ -345,10 +337,10 @@ function BookingFormView(props: BookingFormViewProps) {
                             aria-label="Safari Package"
                             value={props.packageId}
                             onChange={(e) => props.setPackageId(e.target.value)}
-                            className="w-full px-3 py-2.5 text-xs text-stone-900 bg-white font-medium rounded-lg border border-stone-300 focus:ring-1 focus:ring-[#1C3322] focus:border-[#1C3322] focus:outline-none shadow-sm"
+                            className="w-full min-h-[46px] px-3 py-2.5 text-sm sm:text-xs text-stone-900 bg-white font-semibold rounded-xl border border-stone-300 focus:ring-2 focus:ring-[#1C3322] focus:outline-none shadow-sm cursor-pointer"
                         >
                             {SAFARI_PACKAGES.map((p) => (
-                                <option key={p.id} value={p.id} className="text-stone-900 bg-white py-1">
+                                <option key={p.id} value={p.id} className="text-stone-900 bg-white py-1.5">
                                     {p.title} ({format(p.basePriceZAR)} {p.isVehicleRate ? 'private vehicle' : '/ person'})
                                 </option>
                             ))}
@@ -364,56 +356,82 @@ function BookingFormView(props: BookingFormViewProps) {
                             required
                             value={props.date}
                             onChange={(e) => props.setDate(e.target.value)}
-                            className="w-full px-3 py-2.5 text-xs text-stone-900 bg-white font-medium rounded-lg border border-stone-300 focus:ring-1 focus:ring-[#1C3322] focus:border-[#1C3322] focus:outline-none shadow-sm"
+                            className="w-full min-h-[46px] px-3 py-2.5 text-sm sm:text-xs text-stone-900 bg-white font-medium rounded-xl border border-stone-300 focus:ring-2 focus:ring-[#1C3322] focus:outline-none shadow-sm"
                         />
                     </div>
                 </div>
             </div>
 
-            {/* Step 2: Passenger Manifest & Routing Logistics */}
+            {/* Step 2: Party Configuration & Pickup / Drop-off */}
             <div>
-                <div className="flex items-center justify-between mb-1.5">
+                <div className="flex items-center justify-between mb-2">
                     <span className="text-xs font-bold uppercase tracking-wider text-[#1C3322]">
-                        2. Party Configuration &amp; Trip Logistics
+                        2. Party Configuration &amp; Logistics
                     </span>
-                    <span className="text-[11px] font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center gap-1">
+                    <span className="text-[11px] font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center gap-1 border border-emerald-200">
                         <Users className="w-3 h-3" />
-                        {totalPartyCount} Explorer{totalPartyCount > 1 ? 's' : ''} Selected
+                        {totalPartyCount} Explorer{totalPartyCount > 1 ? 's' : ''}
                     </span>
                 </div>
 
+                {/* Touch-Friendly Stepper Buttons */}
                 <div className="grid grid-cols-2 gap-3 mb-3">
-                    <div>
-                        <label htmlFor="input-adults" className="block text-[11px] font-semibold text-stone-700 mb-1">
+                    <div className="bg-stone-50 border border-stone-200 p-2.5 rounded-xl">
+                        <span className="block text-[11px] font-bold text-stone-700 mb-1.5">
                             Adults (12+ yrs)
-                        </label>
-                        <input
-                            id="input-adults"
-                            type="number"
-                            min={1}
-                            max={20}
-                            value={props.adults}
-                            onChange={(e) => props.setAdults(Math.max(1, Number.parseInt(e.target.value, 10) || 1))}
-                            className="w-full px-3 py-2 text-xs text-stone-900 bg-white font-medium rounded-lg border border-stone-300 focus:ring-1 focus:ring-[#1C3322] focus:outline-none shadow-sm"
-                        />
+                        </span>
+                        <div className="flex items-center justify-between bg-white border border-stone-300 rounded-lg overflow-hidden shadow-sm">
+                            <button
+                                type="button"
+                                onClick={() => props.setAdults(Math.max(1, props.adults - 1))}
+                                className="w-11 h-10 flex items-center justify-center text-stone-700 hover:bg-stone-100 active:bg-stone-200 font-bold cursor-pointer transition select-none"
+                                aria-label="Decrease Adults"
+                            >
+                                <Minus className="w-4 h-4" />
+                            </button>
+                            <span className="text-base font-bold text-[#1C3322]">
+                                {props.adults}
+                            </span>
+                            <button
+                                type="button"
+                                onClick={() => props.setAdults(Math.min(20, props.adults + 1))}
+                                className="w-11 h-10 flex items-center justify-center text-stone-700 hover:bg-stone-100 active:bg-stone-200 font-bold cursor-pointer transition select-none"
+                                aria-label="Increase Adults"
+                            >
+                                <Plus className="w-4 h-4" />
+                            </button>
+                        </div>
                     </div>
-                    <div>
-                        <label htmlFor="input-children" className="block text-[11px] font-semibold text-stone-700 mb-1">
+
+                    <div className="bg-stone-50 border border-stone-200 p-2.5 rounded-xl">
+                        <span className="block text-[11px] font-bold text-stone-700 mb-1.5">
                             Children (4-11 yrs)
-                        </label>
-                        <input
-                            id="input-children"
-                            type="number"
-                            min={0}
-                            max={10}
-                            value={props.childrenCount}
-                            onChange={(e) => props.setChildrenCount(Math.max(0, Number.parseInt(e.target.value, 10) || 0))}
-                            className="w-full px-3 py-2 text-xs text-stone-900 bg-white font-medium rounded-lg border border-stone-300 focus:ring-1 focus:ring-[#1C3322] focus:outline-none shadow-sm"
-                        />
+                        </span>
+                        <div className="flex items-center justify-between bg-white border border-stone-300 rounded-lg overflow-hidden shadow-sm">
+                            <button
+                                type="button"
+                                onClick={() => props.setChildrenCount(Math.max(0, props.childrenCount - 1))}
+                                className="w-11 h-10 flex items-center justify-center text-stone-700 hover:bg-stone-100 active:bg-stone-200 font-bold cursor-pointer transition select-none"
+                                aria-label="Decrease Children"
+                            >
+                                <Minus className="w-4 h-4" />
+                            </button>
+                            <span className="text-base font-bold text-[#1C3322]">
+                                {props.childrenCount}
+                            </span>
+                            <button
+                                type="button"
+                                onClick={() => props.setChildrenCount(Math.min(10, props.childrenCount + 1))}
+                                className="w-11 h-10 flex items-center justify-center text-stone-700 hover:bg-stone-100 active:bg-stone-200 font-bold cursor-pointer transition select-none"
+                                aria-label="Increase Children"
+                            >
+                                <Plus className="w-4 h-4" />
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <label htmlFor="select-pickup" className="block text-[11px] font-semibold text-stone-700 mb-1 flex items-center gap-1">
                             <MapPin className="w-3 h-3 text-[#C2933D]" />
@@ -423,7 +441,7 @@ function BookingFormView(props: BookingFormViewProps) {
                             id="select-pickup"
                             value={props.pickupPoint}
                             onChange={(e) => props.setPickupPoint(e.target.value)}
-                            className="w-full px-3 py-2 text-xs text-stone-900 bg-white font-medium rounded-lg border border-stone-300 focus:ring-1 focus:ring-[#1C3322] focus:outline-none shadow-sm"
+                            className="w-full min-h-[44px] px-3 py-2 text-sm sm:text-xs text-stone-900 bg-white font-medium rounded-xl border border-stone-300 focus:ring-2 focus:ring-[#1C3322] focus:outline-none shadow-sm cursor-pointer"
                         >
                             <option value="Hazyview Lodge / Hotel">Hazyview Lodge / Hotel (Complimentary)</option>
                             <option value="Phabeni Gate (Kruger)">Phabeni Gate (Kruger)</option>
@@ -444,7 +462,7 @@ function BookingFormView(props: BookingFormViewProps) {
                             id="select-dropoff"
                             value={props.dropoffPoint}
                             onChange={(e) => props.setDropoffPoint(e.target.value)}
-                            className="w-full px-3 py-2 text-xs text-stone-900 bg-white font-medium rounded-lg border border-stone-300 focus:ring-1 focus:ring-[#1C3322] focus:outline-none shadow-sm"
+                            className="w-full min-h-[44px] px-3 py-2 text-sm sm:text-xs text-stone-900 bg-white font-medium rounded-xl border border-stone-300 focus:ring-2 focus:ring-[#1C3322] focus:outline-none shadow-sm cursor-pointer"
                         >
                             <option value="Same as Pickup Location">Same as Pickup Location</option>
                             <option value="Hazyview Lodge / Hotel">Hazyview Lodge / Hotel</option>
@@ -455,25 +473,6 @@ function BookingFormView(props: BookingFormViewProps) {
                         </select>
                     </div>
                 </div>
-
-                <div>
-                    <label htmlFor="select-route" className="block text-[11px] font-semibold text-stone-700 mb-1 flex items-center gap-1">
-                        <Compass className="w-3 h-3 text-[#1C3322]" />
-                        <span>Full Safari Route &amp; Kruger Entrance Gate</span>
-                    </label>
-                    <select
-                        id="select-route"
-                        value={props.safariRoute}
-                        onChange={(e) => props.setSafariRoute(e.target.value)}
-                        className="w-full px-3 py-2 text-xs text-stone-900 bg-white font-medium rounded-lg border border-stone-300 focus:ring-1 focus:ring-[#1C3322] focus:outline-none shadow-sm"
-                    >
-                        <option value="Phabeni Gate & Central Kruger (Skukuza)">Phabeni Gate & Central Kruger (Skukuza & Sabie River Loop)</option>
-                        <option value="Paul Kruger Gate (High Predator Density)">Paul Kruger Gate (High Predator Density Corridor)</option>
-                        <option value="Numbi Gate (Pretoriuskop Granite Route)">Numbi Gate (Pretoriuskop Granite Outcrops)</option>
-                        <option value="Malelane & Berg-en-Dal (Southern White Rhino Zone)">Malelane & Berg-en-Dal (Southern White Rhino Zone)</option>
-                        <option value="Panorama Route & Blyde Canyon Combo">Panorama Route & Blyde River Canyon Combo</option>
-                    </select>
-                </div>
             </div>
 
             {/* Step 3: Optional Bush Add-ons */}
@@ -482,30 +481,30 @@ function BookingFormView(props: BookingFormViewProps) {
                     3. Optional Bush Add-ons
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                    <div className="flex items-center gap-2.5 p-3 rounded-lg border border-stone-300 bg-stone-50/70 hover:bg-stone-100 hover:border-[#1C3322] cursor-pointer transition shadow-sm">
+                    <div className="flex items-center gap-2.5 p-3 rounded-xl border border-stone-300 bg-stone-50/70 hover:bg-stone-100 hover:border-[#1C3322] cursor-pointer transition shadow-sm">
                         <input
                             id="addon-breakfast"
                             type="checkbox"
                             checked={props.includeBreakfast}
                             onChange={(e) => props.setIncludeBreakfast(e.target.checked)}
-                            className="w-4 h-4 rounded text-[#1C3322] border-stone-300 focus:ring-[#1C3322] cursor-pointer"
+                            className="w-5 h-5 rounded text-[#1C3322] border-stone-300 focus:ring-[#1C3322] cursor-pointer"
                         />
                         <label htmlFor="addon-breakfast" className="cursor-pointer select-none">
-                            <span className="font-semibold block text-stone-900">Full Bush Breakfast Stop</span>
+                            <span className="font-semibold block text-stone-900 text-sm sm:text-xs">Full Bush Breakfast Stop</span>
                             <span className="text-[11px] text-stone-600 font-medium">+{format(180)} per explorer</span>
                         </label>
                     </div>
 
-                    <div className="flex items-center gap-2.5 p-3 rounded-lg border border-stone-300 bg-stone-50/70 hover:bg-stone-100 hover:border-[#1C3322] cursor-pointer transition shadow-sm">
+                    <div className="flex items-center gap-2.5 p-3 rounded-xl border border-stone-300 bg-stone-50/70 hover:bg-stone-100 hover:border-[#1C3322] cursor-pointer transition shadow-sm">
                         <input
                             id="addon-lens"
                             type="checkbox"
                             checked={props.includeLensRental}
                             onChange={(e) => props.setIncludeLensRental(e.target.checked)}
-                            className="w-4 h-4 rounded text-[#1C3322] border-stone-300 focus:ring-[#1C3322] cursor-pointer"
+                            className="w-5 h-5 rounded text-[#1C3322] border-stone-300 focus:ring-[#1C3322] cursor-pointer"
                         />
                         <label htmlFor="addon-lens" className="cursor-pointer select-none">
-                            <span className="font-semibold block text-stone-900">Telephoto Safari Lens Hire</span>
+                            <span className="font-semibold block text-stone-900 text-sm sm:text-xs">Telephoto Safari Lens Hire</span>
                             <span className="text-[11px] text-stone-600 font-medium">+{format(650)} / day rental</span>
                         </label>
                     </div>
@@ -527,7 +526,7 @@ function BookingFormView(props: BookingFormViewProps) {
                             placeholder="Full Name *"
                             value={props.fullName}
                             onChange={(e) => props.setFullName(e.target.value)}
-                            className="w-full px-3 py-2 text-xs text-stone-900 bg-white placeholder:text-stone-400 font-medium rounded-lg border border-stone-300 focus:ring-1 focus:ring-[#1C3322] focus:border-[#1C3322] focus:outline-none shadow-sm"
+                            className="w-full min-h-[44px] px-3 py-2 text-sm sm:text-xs text-stone-900 bg-white placeholder:text-stone-400 font-medium rounded-xl border border-stone-300 focus:ring-2 focus:ring-[#1C3322] focus:outline-none shadow-sm"
                         />
                     </div>
                     <div>
@@ -539,7 +538,7 @@ function BookingFormView(props: BookingFormViewProps) {
                             placeholder="Email Address *"
                             value={props.email}
                             onChange={(e) => props.setEmail(e.target.value)}
-                            className="w-full px-3 py-2 text-xs text-stone-900 bg-white placeholder:text-stone-400 font-medium rounded-lg border border-stone-300 focus:ring-1 focus:ring-[#1C3322] focus:border-[#1C3322] focus:outline-none shadow-sm"
+                            className="w-full min-h-[44px] px-3 py-2 text-sm sm:text-xs text-stone-900 bg-white placeholder:text-stone-400 font-medium rounded-xl border border-stone-300 focus:ring-2 focus:ring-[#1C3322] focus:outline-none shadow-sm"
                         />
                     </div>
                     <div>
@@ -551,14 +550,14 @@ function BookingFormView(props: BookingFormViewProps) {
                             placeholder="WhatsApp / Phone *"
                             value={props.phone}
                             onChange={(e) => props.setPhone(e.target.value)}
-                            className="w-full px-3 py-2 text-xs text-stone-900 bg-white placeholder:text-stone-400 font-medium rounded-lg border border-stone-300 focus:ring-1 focus:ring-[#1C3322] focus:border-[#1C3322] focus:outline-none shadow-sm"
+                            className="w-full min-h-[44px] px-3 py-2 text-sm sm:text-xs text-stone-900 bg-white placeholder:text-stone-400 font-medium rounded-xl border border-stone-300 focus:ring-2 focus:ring-[#1C3322] focus:outline-none shadow-sm"
                         />
                     </div>
                 </div>
             </div>
 
             {/* Step 5: SANParks Gate Permit Identification */}
-            <div className="bg-[#FAF8F5] p-4 rounded-xl border border-[#C2933D]/40 space-y-2.5">
+            <div className="bg-[#FAF8F5] p-4 rounded-2xl border border-[#C2933D]/40 space-y-2.5">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#1C3322]">
                         <FileText className="w-3.5 h-3.5 text-[#C2933D]" />
@@ -585,7 +584,7 @@ function BookingFormView(props: BookingFormViewProps) {
                                 props.setIdType(val);
                                 if (val === 'sa_id') props.setNationality('South Africa');
                             }}
-                            className="w-full px-3 py-2 text-xs text-stone-900 bg-white font-medium rounded-lg border border-stone-300 focus:ring-1 focus:ring-[#1C3322] focus:outline-none shadow-sm"
+                            className="w-full min-h-[44px] px-3 py-2 text-sm sm:text-xs text-stone-900 bg-white font-medium rounded-xl border border-stone-300 focus:ring-2 focus:ring-[#1C3322] focus:outline-none shadow-sm"
                         >
                             <option value="sa_id" className="text-stone-900 bg-white">South African ID</option>
                             <option value="passport" className="text-stone-900 bg-white">International Passport</option>
@@ -604,7 +603,7 @@ function BookingFormView(props: BookingFormViewProps) {
                             placeholder={props.idType === 'sa_id' ? 'e.g. 9508125089083' : 'e.g. A12345678'}
                             value={props.idNumber}
                             onChange={(e) => props.setIdNumber(e.target.value)}
-                            className="w-full px-3 py-2 text-xs text-stone-900 bg-white placeholder:text-stone-400 font-mono tracking-wider font-semibold rounded-lg border border-stone-300 focus:ring-1 focus:ring-[#1C3322] focus:outline-none shadow-sm"
+                            className="w-full min-h-[44px] px-3 py-2 text-sm sm:text-xs text-stone-900 bg-white placeholder:text-stone-400 font-mono tracking-wider font-semibold rounded-xl border border-stone-300 focus:ring-2 focus:ring-[#1C3322] focus:outline-none shadow-sm"
                         />
                     </div>
 
@@ -619,13 +618,13 @@ function BookingFormView(props: BookingFormViewProps) {
                             value={props.nationality}
                             onChange={(e) => props.setNationality(e.target.value)}
                             placeholder="e.g. South Africa, Germany, UK"
-                            className="w-full px-3 py-2 text-xs text-stone-900 bg-white placeholder:text-stone-400 font-medium rounded-lg border border-stone-300 focus:ring-1 focus:ring-[#1C3322] focus:outline-none shadow-sm"
+                            className="w-full min-h-[44px] px-3 py-2 text-sm sm:text-xs text-stone-900 bg-white placeholder:text-stone-400 font-medium rounded-xl border border-stone-300 focus:ring-2 focus:ring-[#1C3322] focus:outline-none shadow-sm"
                         />
                     </div>
                 </div>
             </div>
 
-            {/* Notes */}
+            {/* Special Notes */}
             <div>
                 <label htmlFor="input-notes" className="sr-only">Special notes</label>
                 <input
@@ -634,15 +633,15 @@ function BookingFormView(props: BookingFormViewProps) {
                     placeholder="Special dietary requirements or notes (optional)"
                     value={props.notes}
                     onChange={(e) => props.setNotes(e.target.value)}
-                    className="w-full px-3 py-2 text-xs text-stone-900 bg-white placeholder:text-stone-400 font-medium rounded-lg border border-stone-300 focus:ring-1 focus:ring-[#1C3322] focus:outline-none shadow-sm"
+                    className="w-full min-h-[44px] px-3 py-2 text-sm sm:text-xs text-stone-900 bg-white placeholder:text-stone-400 font-medium rounded-xl border border-stone-300 focus:ring-2 focus:ring-[#1C3322] focus:outline-none shadow-sm"
                 />
             </div>
 
             {/* Summary Bar */}
-            <div className="bg-[#F7F4EC] p-4 rounded-xl border border-[#C2933D]/40 flex flex-col sm:flex-row items-center justify-between gap-3 text-stone-900 shadow-sm">
-                <div>
+            <div className="bg-[#F7F4EC] p-4 rounded-2xl border border-[#C2933D]/40 flex flex-col sm:flex-row items-center justify-between gap-3 text-stone-900 shadow-sm">
+                <div className="text-center sm:text-left">
                     <span className="text-[10px] uppercase font-bold tracking-wider text-[#1C3322] block">
-                        Total Booking Quote ({totalPartyCount} Explorer{totalPartyCount > 1 ? 's' : ''})
+                        Total Safari Quote ({totalPartyCount} Explorer{totalPartyCount > 1 ? 's' : ''})
                     </span>
                     <div className="text-2xl font-serif font-bold text-[#1C3322]">
                         {format(computedZAR)}
@@ -655,7 +654,7 @@ function BookingFormView(props: BookingFormViewProps) {
                 <button
                     type="submit"
                     disabled={props.loading}
-                    className="w-full sm:w-auto bg-[#1C3322] hover:bg-[#2B4D34] text-white font-bold py-3 px-8 rounded-xl text-xs uppercase tracking-wider transition shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                    className="w-full sm:w-auto bg-[#1C3322] hover:bg-[#2B4D34] text-white font-bold py-3.5 px-8 rounded-xl text-xs uppercase tracking-wider transition shadow-md flex items-center justify-center gap-2 cursor-pointer"
                 >
                     {props.loading ? (
                         <Loader2 className="w-4 h-4 animate-spin text-[#C2933D]" />
@@ -685,7 +684,6 @@ export default function BookingModal({
 
     const [pickupPoint, setPickupPoint] = useState('Hazyview Lodge / Hotel');
     const [dropoffPoint, setDropoffPoint] = useState('Hazyview Lodge / Hotel');
-    const [safariRoute, setSafariRoute] = useState('Phabeni Gate & Central Kruger (Skukuza)');
 
     const [includeBreakfast, setIncludeBreakfast] = useState(false);
     const [includeLensRental, setIncludeLensRental] = useState(false);
@@ -703,6 +701,15 @@ export default function BookingModal({
     const [apiResult, setApiResult] = useState<BookingResponse | null>(null);
     const [errorMessage, setErrorMessage] = useState('');
 
+    // Synchronize props when opening or selecting a package
+    useEffect(() => {
+        if (isOpen) {
+            if (defaultPackageId) setPackageId(defaultPackageId);
+            if (defaultDate) setDate(defaultDate);
+            if (defaultAdults) setAdults(defaultAdults);
+        }
+    }, [isOpen, defaultPackageId, defaultDate, defaultAdults]);
+
     if (!isOpen) return null;
 
     const currentPkg = SAFARI_PACKAGES.find((p) => p.id === packageId) || SAFARI_PACKAGES[0];
@@ -713,7 +720,6 @@ export default function BookingModal({
         setErrorMessage('');
 
         const combinedNotes = [
-            `Route: ${safariRoute}`,
             `Drop-off: ${dropoffPoint}`,
             notes ? `Special Notes: ${notes}` : '',
         ].filter(Boolean).join(' | ');
@@ -759,16 +765,16 @@ export default function BookingModal({
     return (
         <div
             style={{ colorScheme: 'light' }}
-            className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-sm p-4 sm:p-6 flex items-center justify-center text-stone-900"
+            className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-sm p-2 sm:p-6 flex items-start justify-center text-stone-900"
         >
-            <div className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden border border-[#C2933D]/40 text-stone-900 my-8">
+            <div className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden border border-[#C2933D]/40 text-stone-900 my-4 sm:my-8">
                 {/* Header */}
-                <div className="bg-[#1C3322] text-white p-6 relative border-b border-[#C2933D]/30">
+                <div className="bg-[#1C3322] text-white p-5 sm:p-6 relative border-b border-[#C2933D]/30">
                     <button
                         type="button"
                         aria-label="Close reservation dialog"
                         onClick={onClose}
-                        className="absolute top-5 right-5 text-stone-300 hover:text-white bg-[#122216]/50 p-2 rounded-full transition cursor-pointer"
+                        className="absolute top-4 right-4 text-stone-300 hover:text-white bg-[#122216]/50 p-2 rounded-full transition cursor-pointer"
                     >
                         <X className="w-5 h-5" />
                     </button>
@@ -790,7 +796,6 @@ export default function BookingModal({
                         childrenCount={children}
                         pickupPoint={pickupPoint}
                         dropoffPoint={dropoffPoint}
-                        safariRoute={safariRoute}
                         idNumber={idNumber}
                         idType={idType}
                         fullName={fullName}
@@ -812,8 +817,6 @@ export default function BookingModal({
                         setPickupPoint={setPickupPoint}
                         dropoffPoint={dropoffPoint}
                         setDropoffPoint={setDropoffPoint}
-                        safariRoute={safariRoute}
-                        setSafariRoute={setSafariRoute}
                         includeBreakfast={includeBreakfast}
                         setIncludeBreakfast={setIncludeBreakfast}
                         includeLensRental={includeLensRental}
